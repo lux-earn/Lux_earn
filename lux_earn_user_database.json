@@ -15,7 +15,7 @@
       "encrypted_password": "7c6a180b36896a0a8c02787eeafb0e4c",
       "referral_code": "DEF456",
       "inviter_referral_code": "ABC123",
-      "balance": 120.00,
+      "balance": 120,
       "refers": 10
     },
     {
@@ -24,7 +24,16 @@
       "encrypted_password": "e99a18c428cb38d5f260853678922e03",
       "referral_code": "GHI789",
       "inviter_referral_code": null,
-      "balance": 0.00,
+      "balance": 0,
+      "refers": 0
+    },
+    {
+      "username": "Test",
+      "email": "tenocostudio@gmail.com",
+      "encrypted_password": "cc03e747a6afbbcbf8be7668acfebee5",
+      "referral_code": "TEUHZ",
+      "inviter_referral_code": null,
+      "balance": 0,
       "refers": 0
     }
   ]
