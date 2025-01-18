@@ -1,51 +1,47 @@
+// GitHub Configuration
+const GITHUB_CONFIG = {
+    token: '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', // Replace with your GitHub personal access token
+    owner: 'lux-earn',
+    repo: 'Lux_earn',
+    path: 'lux_earn_user_database.json'
+};
+
+// App Configuration
 const CONFIG = {
-  "features": {
-    "referral": true,
-    "spinWheel": true,
-    "withdrawal": false
-  },
-  "missions": [
-    {
-      "id": 1,
-      "title": "Join WhatsApp Group",
-      "reward": 10,
-      "link": "https://chat.whatsapp.com/GlEF7rNUKqX6cIsRdBgxMu"
+    "features": {
+        "referral": true,
+        "spinWheel": true,
+        "withdrawal": false
     },
-    {
-      "id": 2,
-      "title": "Join Telegram Channel",
-      "reward": 10,
-      "link": "https://t.me/lux_earn"
+    "missions": [
+        {
+            "id": 1,
+            "title": "Join WhatsApp Group",
+            "reward": 10,
+            "link": "https://chat.whatsapp.com/GlEF7rNUKqX6cIsRdBgxMu"
+        },
+        {
+            "id": 2,
+            "title": "Join Telegram Channel",
+            "reward": 10,
+            "link": "https://t.me/lux_earn"
+        }
+    ],
+    "spinWheel": {
+        "prizes": [
+            1, 5, 10, 15, 20, 25, 30, 20, 8, 12, 18, 22
+        ]
     },
-    
-  
-  ],
-  "spinWheel": {
-    "prizes": [
-      1,
-      5,
-      10,
-      15,
-      20,
-      25,
-      30,
-      20,
-      8,
-      12,
-      18,
-      22
+    "banks": [
+        "Access Bank",
+        "First Bank",
+        "GT Bank",
+        "UBA",
+        "Zenith Bank",
+        "Kuda Bank",
+        "Opay",
+        "Palmpay"
     ]
-  },
-  "banks": [
-    "Access Bank",
-    "First Bank",
-    "GT Bank",
-    "UBA",
-    "Zenith Bank",
-    "Kuda Bank",
-    "Opay",
-    "Palmpay"
-  ]
 };
 
 // Utility Functions
@@ -53,6 +49,10 @@ const generateReferralCode = (username) => {
     const chars = username.substring(0, 2).toUpperCase() + 
                  Math.random().toString(36).substring(2, 5).toUpperCase();
     return chars;
+};
+
+const encryptPassword = (password) => {
+    return CryptoJS.MD5(password).toString();
 };
 
 const encryptData = (data) => {
@@ -91,46 +91,172 @@ const showLoading = (duration) => {
     }, duration));
 };
 
-// User Management
+// GitHub API Functions
+async function fetchGitHubFile() {
+    try {
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`, {
+            headers: {
+                'Authorization': `token ${GITHUB_CONFIG.token}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+        
+        if (!response.ok) throw new Error('Failed to fetch database');
+        
+        const data = await response.json();
+        const content = atob(data.content);
+        return {
+            content: JSON.parse(content),
+            sha: data.sha
+        };
+    } catch (error) {
+        console.error('Error fetching GitHub file:', error);
+        throw error;
+    }
+}
+
+async function updateGitHubFile(newContent, sha) {
+    try {
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${GITHUB_CONFIG.token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: 'Update user database',
+                content: btoa(JSON.stringify(newContent, null, 2)),
+                sha: sha
+            })
+        });
+        
+        if (!response.ok) throw new Error('Failed to update database');
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error updating GitHub file:', error);
+        throw error;
+    }
+}
+
+// Cookie Functions
+const setCookie = (name, value, days) => {
+    const d = new Date();
+    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + d.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+};
+
+const getCookie = (name) => {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1, c.length);
+        }
+        if (c.indexOf(nameEQ) == 0) {
+            return c.substring(nameEQ.length, c.length);
+        }
+    }
+    return null;
+};
+
+const deleteCookie = (name) => {
+    document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+};
+
+// User Management Class
 class UserManager {
     constructor() {
-        this.loadUser();
         this.setupEventListeners();
+        this.checkAutoLogin();
     }
 
-    loadUser() {
-        this.user = JSON.parse(localStorage.getItem('user')) || null;
-        if (this.user) {
+    async login(username, password) {
+        try {
+            const { content } = await fetchGitHubFile();
+            const user = content.users.find(u => 
+                u.username === username && 
+                u.encrypted_password === encryptPassword(password)
+            );
+
+            if (user) {
+                this.user = {
+                    ...user,
+                    balance: parseFloat(user.balance),
+                    refers: parseInt(user.refers)
+                };
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+                this.updateBalanceDisplay();
+                setCookie('username', username, 30);
+                setCookie('password', password, 30);
+            } else {
+                throw new Error('Invalid username or password');
+            }
+        } catch (error) {
+            showCustomAlert('Login Error', error.message, [
+                { text: 'OK', action: () => {}, closeModal: true }
+            ]);
+        }
+    }
+
+    async register(username, email, password, referralCode) {
+        try {
+            const { content, sha } = await fetchGitHubFile();
+            
+            // Check if username exists
+            if (content.users.some(u => u.username === username)) {
+                throw new Error('Username already exists');
+            }
+
+            // Check if email exists
+            if (content.users.some(u => u.email === email)) {
+                throw new Error('Email already exists');
+            }
+
+            // Create new user
+            const newUser = {
+                username,
+                email,
+                encrypted_password: encryptPassword(password),
+                referral_code: generateReferralCode(username),
+                inviter_referral_code: referralCode || null,
+                balance: 0,
+                refers: 0
+            };
+
+            // Update inviter's referral count and balance if referral code was used
+            if (referralCode) {
+                const inviterIndex = content.users.findIndex(u => u.referral_code === referralCode);
+                if (inviterIndex >= 0) {
+                    content.users[inviterIndex].refers += 1;
+                    content.users[inviterIndex].balance += 50;
+                }
+            }
+
+            // Add new user to database
+            content.users.push(newUser);
+
+            // Update GitHub file
+            await updateGitHubFile(content, sha);
+
+            // Log in the new user
+            this.user = newUser;
             document.getElementById('registration-section').classList.add('hidden');
             document.getElementById('main-app').classList.remove('hidden');
             this.updateBalanceDisplay();
-        }
-    }
+            setCookie('username', username, 30);
+            setCookie('password', password, 30);
 
-    async register(username, email, referralCode) {
-        if (referralCode && referralCode.length !== 5) {
-            showCustomAlert('Invalid Referral', 'Referral code must be exactly 5 characters long.', [
+            await this.showSocialVerification();
+        } catch (error) {
+            showCustomAlert('Registration Error', error.message, [
                 { text: 'OK', action: () => {}, closeModal: true }
             ]);
-            return;
         }
-
-        this.user = {
-            username,
-            email,
-            balance: referralCode ? 10 : 0,
-            referralBalance: 0,
-            withdrawalBalance: 0,
-            referralCode: generateReferralCode(username),
-            referrals: 0,
-            completedMissions: [],
-            lastSpin: null,
-            lastReferralReward: null
-        };
-
-        localStorage.setItem('user', JSON.stringify(this.user));
-
-        await this.showSocialVerification();
     }
 
     async showSocialVerification() {
@@ -149,9 +275,6 @@ class UserManager {
                 text: 'Verify', 
                 action: async () => {
                     await showLoading(15000);
-                    document.getElementById('registration-section').classList.add('hidden');
-                    document.getElementById('main-app').classList.remove('hidden');
-                    this.updateBalanceDisplay();
                 },
                 closeModal: true 
             }
@@ -160,24 +283,72 @@ class UserManager {
 
     updateBalanceDisplay() {
         document.getElementById('total-balance').textContent = `₦${this.user.balance.toFixed(2)}`;
-        document.getElementById('referral-balance').textContent = `₦${this.user.referralBalance.toFixed(2)}`;
-        document.getElementById('withdrawal-balance').textContent = `₦${this.user.withdrawalBalance.toFixed(2)}`;
-        document.getElementById('referral-count').textContent = `${this.user.referrals} referrals`;
-        document.getElementById('referral-code-display').textContent = this.user.referralCode;
+        document.getElementById('referral-balance').textContent = `₦${this.user.balance.toFixed(2)}`;
+        document.getElementById('withdrawal-balance').textContent = `₦0.00`;
+        document.getElementById('referral-count').textContent = `${this.user.refers} referrals`;
+        document.getElementById('referral-code-display').textContent = this.user.referral_code;
+    }
+
+    async updateUserData() {
+        try {
+            const { content, sha } = await fetchGitHubFile();
+            const userIndex = content.users.findIndex(u => u.username === this.user.username);
+            
+            if (userIndex >= 0) {
+                content.users[userIndex] = {
+                    ...this.user,
+                    balance: parseFloat(this.user.balance.toFixed(2))
+                };
+                await updateGitHubFile(content, sha);
+            }
+        } catch (error) {
+            console.error('Error updating user data:', error);
+        }
     }
 
     setupEventListeners() {
+        // Login Form
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            this.login(username, password);
+        });
+
         // Registration Form
         document.getElementById('registration-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
             const referralCode = document.getElementById('referral-code').value;
-            this.register(username, email, referralCode);
+
+            if (password !== confirmPassword) {
+                showCustomAlert('Error', 'Passwords do not match', [
+                    { text: 'OK', action: () => {}, closeModal: true }
+                ]);
+                return;
+            }
+
+            this.register(username, email, password, referralCode);
+        });
+
+        // Toggle between login and registration
+        document.getElementById('show-register').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('registration-section').classList.remove('hidden');
+        });
+
+        document.getElementById('show-login').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('registration-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
         });
 
         // Copy Referral Code
-        document.getElementById('copy-referral').addEventListener('click', () => {
+        document.getElementById('copy-referral').addEventListener('click', async () => {
             if (!CONFIG.features.referral) {
                 showCustomAlert('Feature Unavailable', 'Referral system is currently unavailable.', [
                     { text: 'OK', action: () => {}, closeModal: true }
@@ -185,21 +356,10 @@ class UserManager {
                 return;
             }
 
-            navigator.clipboard.writeText(this.user.referralCode);
-            showCustomAlert('Success', 'Referral code copied! Reward will be added in 12 hours.', [
+            navigator.clipboard.writeText(this.user.referral_code);
+            showCustomAlert('Success', 'Referral code copied!', [
                 { text: 'OK', action: () => {}, closeModal: true }
             ]);
-
-            const now = new Date();
-            if (!this.user.lastReferralReward || 
-                (now - new Date(this.user.lastReferralReward)) >= 12 * 60 * 60 * 1000) {
-                this.user.lastReferralReward = now.toISOString();
-                this.user.referrals++;
-                this.user.referralBalance += 50;
-                this.user.balance += 50;
-                localStorage.setItem('user', JSON.stringify(this.user));
-                this.updateBalanceDisplay();
-            }
         });
 
         // Navigation
@@ -244,14 +404,22 @@ class UserManager {
         container.addEventListener('click', async (e) => {
             if (e.target.classList.contains('verify-btn')) {
                 const missionId = parseInt(e.target.getAttribute('data-mission'));
+                if (!this.user.completedMissions) {
+                    this.user.completedMissions = [];
+                }
+                
                 if (!this.user.completedMissions.includes(missionId)) {
                     await showLoading(15000);
                     const mission = CONFIG.missions.find(m => m.id === missionId);
                     this.user.balance += mission.reward;
                     this.user.completedMissions.push(missionId);
-                    localStorage.setItem('user', JSON.stringify(this.user));
+                    await this.updateUserData();
                     this.updateBalanceDisplay();
                     showCustomAlert('Success', `Congratulations! You earned ₦${mission.reward}`, [
+                        { text: 'OK', action: () => {}, closeModal: true }
+                    ]);
+                } else {
+                    showCustomAlert('Already Completed', 'You have already completed this mission.', [
                         { text: 'OK', action: () => {}, closeModal: true }
                     ]);
                 }
@@ -304,9 +472,13 @@ class UserManager {
                 return;
             }
 
+            if (!this.user.lastSpin) {
+                this.user.lastSpin = new Date(0).toISOString();
+            }
+
             const now = new Date();
-            if (this.user.lastSpin && 
-                (now - new Date(this.user.lastSpin)) < 24 * 60 * 60 * 1000) {
+            const lastSpinDate = new Date(this.user.lastSpin);
+            if (now - lastSpinDate < 24 * 60 * 60 * 1000) {
                 showCustomAlert('Wait Required', 'You can spin again in 24 hours.', [
                     { text: 'OK', action: () => {}, closeModal: true }
                 ]);
@@ -320,7 +492,7 @@ class UserManager {
             const animationDuration = 3000;
             const startTime = Date.now();
 
-            const animate = () => {
+            const animate = async () => {
                 const elapsed = Date.now() - startTime;
                 const progress = Math.min(elapsed / animationDuration, 1);
                 const easeOut = 1 - Math.pow(1 - progress, 3);
@@ -336,11 +508,12 @@ class UserManager {
                 if (progress < 1) {
                     requestAnimationFrame(animate);
                 } else {
-                    this.user.balance += prizes[randomPrize];
+                    const prize = prizes[randomPrize];
+                    this.user.balance += prize;
                     this.user.lastSpin = now.toISOString();
-                    localStorage.setItem('user', JSON.stringify(this.user));
+                    await this.updateUserData();
                     this.updateBalanceDisplay();
-                    showCustomAlert('Congratulations!', `You won ₦${prizes[randomPrize]}!`, [
+                    showCustomAlert('Congratulations!', `You won ₦${prize}!`, [
                         { text: 'OK', action: () => {}, closeModal: true }
                     ]);
                 }
@@ -348,6 +521,25 @@ class UserManager {
 
             animate();
         });
+
+        // Update spin timer
+        setInterval(() => {
+            if (this.user && this.user.lastSpin) {
+                const now = new Date();
+                const lastSpinDate = new Date(this.user.lastSpin);
+                const nextSpin = new Date(lastSpinDate.getTime() + 24 * 60 * 60 * 1000);
+                
+                if (now < nextSpin) {
+                    const timeLeft = nextSpin - now;
+                    const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    document.getElementById('timer-display').textContent = 
+                        `Next spin available in ${hours}h ${minutes}m`;
+                } else {
+                    document.getElementById('timer-display').textContent = 'Spin available!';
+                }
+            }
+        }, 60000);
     }
 
     setupWithdrawal() {
@@ -407,8 +599,7 @@ class UserManager {
             const encryptedData = encryptData(withdrawalData);
 
             this.user.balance -= amount;
-            this.user.withdrawalBalance += amount;
-            localStorage.setItem('user', JSON.stringify(this.user));
+            this.updateUserData();
             this.updateBalanceDisplay();
 
             showCustomAlert('Withdrawal Request', 'Click the button below to send your withdrawal request:', [
@@ -422,6 +613,14 @@ class UserManager {
                 }
             ]);
         });
+    }
+
+    checkAutoLogin() {
+        const username = getCookie('username');
+        const password = getCookie('password');
+        if (username && password) {
+            this.login(username, password);
+        }
     }
 }
 
@@ -437,28 +636,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize user manager
     const userManager = new UserManager();
-
-    // Update timer displays
-    setInterval(() => {
-        if (userManager.user) {
-            // Update spin timer
-            if (userManager.user.lastSpin) {
-                const nextSpin = new Date(userManager.user.lastSpin);
-                nextSpin.setHours(nextSpin.getHours() + 24);
-                const now = new Date();
-                if (now < nextSpin) {
-                    const timeLeft = nextSpin - now;
-                    const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    document.getElementById('timer-display').textContent = 
-                        `Next spin available in ${hours}h ${minutes}m`;
-                } else {
-                    document.getElementById('timer-display').textContent = 'Spin available!';
-                }
-            }
-
-            // Auto-save user data every minute
-            localStorage.setItem('user', JSON.stringify(userManager.user));
-        }
-    }, 60000);
 });
