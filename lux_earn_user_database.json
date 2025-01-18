@@ -88,8 +88,9 @@
       "encrypted_password": "5f532a3fc4f1ea403f37070f59a7a53a",
       "referral_code": "MIN4O",
       "inviter_referral_code": "TEJ55",
-      "balance": 0,
-      "refers": 0
+      "balance": 18,
+      "refers": 0,
+      "lastSpin": "2025-01-18T12:27:35.938Z"
     }
   ]
 }
