@@ -42,6 +42,15 @@
       "encrypted_password": "301123698cd1f9f80161b3b7b61a21c8",
       "referral_code": "JORSD",
       "inviter_referral_code": null,
+      "balance": 50,
+      "refers": 1
+    },
+    {
+      "username": "Bella",
+      "email": "lindleyokpeerhe@gmail.com",
+      "encrypted_password": "301123698cd1f9f80161b3b7b61a21c8",
+      "referral_code": "BE1UK",
+      "inviter_referral_code": "JORSD",
       "balance": 0,
       "refers": 0
     }
