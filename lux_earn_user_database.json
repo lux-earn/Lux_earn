@@ -1,0 +1,31 @@
+{
+  "users": [
+    {
+      "username": "john_doe",
+      "email": "john.doe@example.com",
+      "encrypted_password": "5f4dcc3b5aa765d61d8327deb882cf99",
+      "referral_code": "ABC123",
+      "inviter_referral_code": "XYZ789",
+      "balance": 50.75,
+      "refers": 5
+    },
+    {
+      "username": "jane_smith",
+      "email": "jane.smith@example.com",
+      "encrypted_password": "7c6a180b36896a0a8c02787eeafb0e4c",
+      "referral_code": "DEF456",
+      "inviter_referral_code": "ABC123",
+      "balance": 120.00,
+      "refers": 10
+    },
+    {
+      "username": "sam_brown",
+      "email": "sam.brown@example.com",
+      "encrypted_password": "e99a18c428cb38d5f260853678922e03",
+      "referral_code": "GHI789",
+      "inviter_referral_code": null,
+      "balance": 0.00,
+      "refers": 0
+    }
+  ]
+}
