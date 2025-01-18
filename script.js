@@ -1,6 +1,6 @@
 // GitHub Configuration
 const GITHUB_CONFIG = {
-    token: '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', // Replace with your GitHub personal access token
+    token: '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', // Replace with your GitHub personal access token
     owner: 'lux-earn',
     repo: 'Lux_earn',
     path: 'lux_earn_user_database.json'
