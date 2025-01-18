@@ -60,8 +60,9 @@
       "encrypted_password": "c770e34e3024a6d94619b818a840a598",
       "referral_code": "TEJ55",
       "inviter_referral_code": null,
-      "balance": 150,
-      "refers": 3
+      "balance": 160,
+      "refers": 3,
+      "lastSpin": "2025-01-18T13:34:00.722Z"
     },
     {
       "username": "Axior",
