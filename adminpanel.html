@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxEarn Admin Panel</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: #2d2d2d;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #6c5ce7;
+            margin-bottom: 1rem;
+        }
+
+        .section {
+            background: #2d2d2d;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin-right: 1rem;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #484848;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #6c5ce7;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #a8a8a8;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #484848;
+            border-radius: 8px;
+            background: #363636;
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        button {
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5849c4;
+        }
+
+        .mission {
+            background: #363636;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .prize {
+            background: #363636;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bank {
+            background: #363636;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .success {
+            background: #4cd137;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .code-container {
+            background: #363636;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            position: relative;
+            display: none;
+        }
+
+        .code-container pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #a8a8a8;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .copy-button:hover {
+            background: #5849c4;
+        }
+
+        .copied-tooltip {
+            position: absolute;
+            top: -30px;
+            right: 0;
+            background: #4cd137;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-lock"></i> LuxEarn Admin Panel</h1>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-toggle-on"></i> Feature Toggles</h2>
+            <div class="toggle-container">
+                <label class="toggle">
+                    <input type="checkbox" id="referral-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span>Referral System</span>
+            </div>
+            <div class="toggle-container">
+                <label class="toggle">
+                    <input type="checkbox" id="spinwheel-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span>Spin Wheel</span>
+            </div>
+            <div class="toggle-container">
+                <label class="toggle">
+                    <input type="checkbox" id="withdrawal-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span>Withdrawal</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-tasks"></i> Missions</h2>
+            <div id="missions-container"></div>
+            <button onclick="addMission()"><i class="fas fa-plus"></i> Add Mission</button>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-gift"></i> Spin Wheel Prizes</h2>
+            <div id="prizes-container"></div>
+            <button onclick="addPrize()"><i class="fas fa-plus"></i> Add Prize</button>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-university"></i> Banks</h2>
+            <div id="banks-container"></div>
+            <button onclick="addBank()"><i class="fas fa-plus"></i> Add Bank</button>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-lock"></i> Decrypt Withdrawal Data</h2>
+            <div class="form-group">
+                <label>Encrypted Data</label>
+                <textarea id="encrypted-data" rows="4"></textarea>
+            </div>
+            <button onclick="decryptData()"><i class="fas fa-unlock"></i> Decrypt</button>
+            <div id="decrypted-result" class="form-group" style="margin-top: 1rem;"></div>
+        </div>
+
+        <div class="success" id="save-success">
+            Changes saved successfully!
+        </div>
+
+        <button onclick="saveChanges()" style="width: 100%;"><i class="fas fa-save"></i> Save All Changes</button>
+
+        <div class="code-container" id="config-container">
+            <h3 style="margin-bottom: 1rem;">Updated Configuration Code</h3>
+            <button class="copy-button" onclick="copyConfig()">
+                <i class="fas fa-copy"></i> Copy
+            </button>
+            <div class="copied-tooltip">Copied!</div>
+            <pre><code id="config-code"></code></pre>
+        </div>
+    </div>
+
+    <script>
+        let config = {
+            features: {
+                referral: true,
+                spinWheel: true,
+                withdrawal: true
+            },
+            missions: [
+                {
+                    id: 1,
+                    title: "Join WhatsApp Group",
+                    reward: 100,
+                    link: "https://chat.whatsapp.com/GlEF7rNUKqX6cIsRdBgxMu"
+                },
+                {
+                    id: 2,
+                    title: "Join Telegram Channel",
+                    reward: 100,
+                    link: "https://t.me/lux_earn"
+                }
+            ],
+            spinWheel: {
+                prizes: [1, 5, 100, 15, 20, 25, 30, 2, 8, 12, 18, 22]
+            },
+            banks: [
+                "Access Bank",
+                "First Bank",
+                "GT Bank",
+                "UBA",
+                "Zenith Bank",
+                "Kuda Bank",
+                "Opay",
+                "Palmpay"
+            ]
+        };
+
+        // Initialize toggles
+        document.getElementById('referral-toggle').checked = config.features.referral;
+        document.getElementById('spinwheel-toggle').checked = config.features.spinWheel;
+        document.getElementById('withdrawal-toggle').checked = config.features.withdrawal;
+
+        // Render missions
+        function renderMissions() {
+            const container = document.getElementById('missions-container');
+            container.innerHTML = '';
+            config.missions.forEach((mission, index) => {
+                container.innerHTML += `
+                    <div class="mission">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" value="${mission.title}" onchange="updateMission(${index}, 'title', this.value)">
+                        </div>
+                        <div class="form-group">
+                            <label>Reward</label>
+                            <input type="number" value="${mission.reward}" onchange="updateMission(${index}, 'reward', parseInt(this.value))">
+                        </div>
+                        <div class="form-group">
+                            <label>Link</label>
+                            <input type="text" value="${mission.link}" onchange="updateMission(${index}, 'link', this.value)">
+                        </div>
+                        <button onclick="deleteMission(${index})"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                `;
+            });
+        }
+
+        // Render prizes
+        function renderPrizes() {
+            const container = document.getElementById('prizes-container');
+            container.innerHTML = '';
+            config.spinWheel.prizes.forEach((prize, index) => {
+                container.innerHTML += `
+                    <div class="prize">
+                        <input type="number" value="${prize}" onchange="updatePrize(${index}, parseInt(this.value))">
+                        <button onclick="deletePrize(${index})"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            });
+        }
+
+        // Render banks
+        function renderBanks() {
+            const container = document.getElementById('banks-container');
+            container.innerHTML = '';
+            config.banks.forEach((bank, index) => {
+                container.innerHTML += `
+                    <div class="bank">
+                        <input type="text" value="${bank}" onchange="updateBank(${index}, this.value)">
+                        <button onclick="deleteBank(${index})"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            });
+        }
+
+        // Initial render
+        renderMissions();
+        renderPrizes();
+        renderBanks();
+
+        // Update functions
+        function updateMission(index, field, value) {
+            config.missions[index][field] = value;
+        }
+
+        function updatePrize(index, value) {
+            config.spinWheel.prizes[index] = value;
+        }
+
+        function updateBank(index, value) {
+            config.banks[index] = value;
+        }
+
+        // Delete functions
+        function deleteMission(index) {
+            config.missions.splice(index, 1);
+            renderMissions();
+        }
+
+        function deletePrize(index) {
+            config.spinWheel.prizes.splice(index, 1);
+            renderPrizes();
+        }
+
+        function deleteBank(index) {
+            config.banks.splice(index, 1);
+            renderBanks();
+        }
+
+        // Add functions
+        function addMission() {
+            config.missions.push({
+                id: config.missions.length + 1,
+                title: "New Mission",
+                reward: 0,
+                link: ""
+            });
+            renderMissions();
+        }
+
+        function addPrize() {
+            config.spinWheel.prizes.push(0);
+            renderPrizes();
+        }
+
+        function addBank() {
+            config.banks.push("New Bank");
+            renderBanks();
+        }
+
+        // Save changes
+        function saveChanges() {
+            config.features.referral = document.getElementById('referral-toggle').checked;
+            config.features.spinWheel = document.getElementById('spinwheel-toggle').checked;
+            config.features.withdrawal = document.getElementById('withdrawal-toggle').checked;
+
+            // Show success message
+            const success = document.getElementById('save-success');
+            success.style.display = 'block';
+            setTimeout(() => {
+                success.style.display = 'none';
+            }, 3000);
+
+            // Update and show config code
+            const configContainer = document.getElementById('config-container');
+            const configCode = document.getElementById('config-code');
+            configContainer.style.display = 'block';
+            configCode.textContent = 'const CONFIG = ' + JSON.stringify(config, null, 2) + ';';
+        }
+
+        // Copy config
+        function copyConfig() {
+            const configCode = document.getElementById('config-code').textContent;
+            navigator.clipboard.writeText(configCode);
+            
+            // Show copied tooltip
+            const tooltip = document.querySelector('.copied-tooltip');
+            tooltip.style.display = 'block';
+            setTimeout(() => {
+                tooltip.style.display = 'none';
+            }, 2000);
+        }
+
+        // Decrypt data
+        function decryptData() {
+            const encryptedData = document.getElementById('encrypted-data').value;
+            try {
+                const decrypted = JSON.parse(atob(encryptedData));
+                document.getElementById('decrypted-result').innerHTML = `
+                    <pre style="background: #363636; padding: 1rem; border-radius: 8px; overflow-x: auto;">
+${JSON.stringify(decrypted, null, 2)}
+                    </pre>
+                `;
+            } catch (error) {
+                document.getElementById('decrypted-result').innerHTML = `
+                    <div style="color: #ff6b6b; background: #363636; padding: 1rem; border-radius: 8px;">
+                        Invalid encrypted data
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

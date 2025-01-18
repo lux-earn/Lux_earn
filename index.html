@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxEarn - Earn Real Money</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Registration Section -->
+        <div id="registration-section" class="section">
+            <div class="registration-container">
+                <h1>Welcome to LuxEarn</h1>
+                <form id="registration-form">
+                    <input type="text" id="username" placeholder="Username" required>
+                    <input type="email" id="email" placeholder="Email" required>
+                    <input type="text" id="referral-code" placeholder="Referral Code (Optional)">
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main App Section -->
+        <div id="main-app" class="section hidden">
+            <!-- Navigation -->
+            <nav>
+                <button class="nav-btn active" data-section="home">
+                    <i class="fas fa-home"></i> Home
+                </button>
+                <button class="nav-btn" data-section="invites">
+                    <i class="fas fa-user-plus"></i> Invites
+                </button>
+                <button class="nav-btn" data-section="missions">
+                    <i class="fas fa-tasks"></i> Missions
+                </button>
+                <button class="nav-btn" data-section="games">
+                    <i class="fas fa-gamepad"></i> Games
+                </button>
+                <button class="nav-btn" data-section="wallet">
+                    <i class="fas fa-wallet"></i> Wallet
+                </button>
+            </nav>
+
+            <!-- Home Section -->
+            <div id="home" class="content-section">
+                <div class="balance-card">
+                    <div class="balance-item">
+                        <h3>Total Balance</h3>
+                        <p id="total-balance">₦0.00</p>
+                    </div>
+                    <div class="balance-item">
+                        <h3>Referral Balance</h3>
+                        <p id="referral-balance">₦0.00</p>
+                    </div>
+                    <div class="balance-item">
+                        <h3>Withdrawal Balance</h3>
+                        <p id="withdrawal-balance">₦0.00</p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h3>About LuxEarn</h3>
+                    <p>Complete enjoyable tasks and earn money instantly! Refer friends to earn ₦50 per referral.</p>
+                </div>
+            </div>
+
+            <!-- Invites Section -->
+            <div id="invites" class="content-section hidden">
+                <div class="referral-card">
+                    <h3>Your Referrals</h3>
+                    <p id="referral-count">0 referrals</p>
+                    <div class="referral-code-container">
+                        <span id="referral-code-display"></span>
+                        <button id="copy-referral" class="copy-btn">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Missions Section -->
+            <div id="missions" class="content-section hidden">
+                <div class="missions-container">
+                    <!-- Missions will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- Games Section -->
+            <div id="games" class="content-section hidden">
+                <div class="spin-wheel-container">
+                    <canvas id="wheel-canvas"></canvas>
+                    <button id="spin-btn">SPIN</button>
+                    <div id="timer-display"></div>
+                </div>
+            </div>
+
+            <!-- Wallet Section -->
+            <div id="wallet" class="content-section hidden">
+                <div class="withdrawal-form">
+                    <h3>Withdraw Funds</h3>
+                    <input type="text" id="account-name" placeholder="Account Name">
+                    <input type="text" id="account-number" placeholder="Account Number">
+                    <select id="bank-select">
+                        <option value="">Select Bank</option>
+                        <!-- Banks will be added dynamically -->
+                    </select>
+                    <input type="number" id="withdrawal-amount" placeholder="Amount (Min: ₦1,000)">
+                    <button id="withdraw-btn">Withdraw</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Alert Modal -->
+    <div id="custom-alert" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="alert-title"></h3>
+            <p id="alert-message"></p>
+            <div id="alert-buttons"></div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
