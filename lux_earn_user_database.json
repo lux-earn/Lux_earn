@@ -60,6 +60,15 @@
       "encrypted_password": "c770e34e3024a6d94619b818a840a598",
       "referral_code": "TEJ55",
       "inviter_referral_code": null,
+      "balance": 50,
+      "refers": 1
+    },
+    {
+      "username": "Axior",
+      "email": "procode645@gmail.com",
+      "encrypted_password": "202cb962ac59075b964b07152d234b70",
+      "referral_code": "AXO88",
+      "inviter_referral_code": "TEJ55",
       "balance": 0,
       "refers": 0
     }
