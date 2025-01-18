@@ -92,6 +92,15 @@
       "balance": 18,
       "refers": 0,
       "lastSpin": "2025-01-18T12:27:35.938Z"
+    },
+    {
+      "username": "Bellady",
+      "email": "lindleyokpehterhe@gmail.com",
+      "encrypted_password": "9006249cf21c989a3eba86c977c0e6b9",
+      "referral_code": "BEWZS",
+      "inviter_referral_code": null,
+      "balance": 0,
+      "refers": 0
     }
   ]
 }
