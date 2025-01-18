@@ -60,8 +60,8 @@
       "encrypted_password": "c770e34e3024a6d94619b818a840a598",
       "referral_code": "TEJ55",
       "inviter_referral_code": null,
-      "balance": 100,
-      "refers": 2
+      "balance": 150,
+      "refers": 3
     },
     {
       "username": "Axior",
@@ -81,6 +81,15 @@
       "balance": 10,
       "refers": 0,
       "lastSpin": "2025-01-18T12:25:20.919Z"
+    },
+    {
+      "username": "Microsoft",
+      "email": "microsoft@gmail.com",
+      "encrypted_password": "5f532a3fc4f1ea403f37070f59a7a53a",
+      "referral_code": "MIN4O",
+      "inviter_referral_code": "TEJ55",
+      "balance": 0,
+      "refers": 0
     }
   ]
 }
