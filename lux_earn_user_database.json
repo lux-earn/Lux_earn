@@ -35,6 +35,15 @@
       "inviter_referral_code": null,
       "balance": 0,
       "refers": 0
+    },
+    {
+      "username": "Joo",
+      "email": "lindleyokpeterhe@gmail.com",
+      "encrypted_password": "301123698cd1f9f80161b3b7b61a21c8",
+      "referral_code": "JORSD",
+      "inviter_referral_code": null,
+      "balance": 0,
+      "refers": 0
     }
   ]
 }
