@@ -78,8 +78,9 @@
       "encrypted_password": "1f3870be274f6c49b3e31a0c6728957f",
       "referral_code": "AP3HL",
       "inviter_referral_code": "TEJ55",
-      "balance": 0,
-      "refers": 0
+      "balance": 10,
+      "refers": 0,
+      "lastSpin": "2025-01-18T12:25:20.919Z"
     }
   ]
 }
