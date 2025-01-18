@@ -53,6 +53,15 @@
       "inviter_referral_code": "JORSD",
       "balance": 0,
       "refers": 0
+    },
+    {
+      "username": "Tenoco",
+      "email": "tenocostudio0@gmail.com",
+      "encrypted_password": "c770e34e3024a6d94619b818a840a598",
+      "referral_code": "TEJ55",
+      "inviter_referral_code": null,
+      "balance": 0,
+      "refers": 0
     }
   ]
 }
