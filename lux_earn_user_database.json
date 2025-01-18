@@ -113,8 +113,9 @@
       "encrypted_password": "46c76d0c403a193f1bda5e1821584e74",
       "referral_code": "GOF9X",
       "inviter_referral_code": "Ghy",
-      "balance": 0,
-      "refers": 0
+      "balance": 20,
+      "refers": 0,
+      "lastSpin": "2025-01-18T21:54:22.521Z"
     }
   ]
 }
