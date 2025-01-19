@@ -135,6 +135,15 @@
       "balance": 5,
       "refers": 0,
       "lastSpin": "2025-01-19T09:45:12.662Z"
+    },
+    {
+      "username": "Kevin",
+      "email": "kevin@gmail.com",
+      "encrypted_password": "202cb962ac59075b964b07152d234b70",
+      "referral_code": "KEO16",
+      "inviter_referral_code": "TEJ5",
+      "balance": 0,
+      "refers": 0
     }
   ]
 }
