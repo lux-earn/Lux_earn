@@ -219,8 +219,11 @@
       "encrypted_password": "44a59ef2cf16f6e19679e8e6a71f4c01",
       "referral_code": "FRS9I",
       "inviter_referral_code": null,
-      "balance": 0,
-      "refers": 0
+      "balance": 10,
+      "refers": 0,
+      "completedMissions": [
+        2
+      ]
     }
   ]
 }
