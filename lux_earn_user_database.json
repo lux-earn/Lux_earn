@@ -163,6 +163,15 @@
       "balance": 1,
       "refers": 0,
       "lastSpin": "2025-01-20T06:02:04.669Z"
+    },
+    {
+      "username": "Favoure",
+      "email": "favourboi160@gmail.com",
+      "encrypted_password": "b094916741860db912ddf8403ba870f1",
+      "referral_code": "FAS1N",
+      "inviter_referral_code": null,
+      "balance": 0,
+      "refers": 0
     }
   ]
 }
