@@ -203,6 +203,15 @@
       "completedMissions": [
         2
       ]
+    },
+    {
+      "username": "Bukola",
+      "email": "kaywai308@gmail.com",
+      "encrypted_password": "4825a3ce12453d5ed2f97c5f4c81ed1f",
+      "referral_code": "BUVVC",
+      "inviter_referral_code": null,
+      "balance": 0,
+      "refers": 0
     }
   ]
 }
