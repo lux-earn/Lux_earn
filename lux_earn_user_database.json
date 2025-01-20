@@ -170,8 +170,11 @@
       "encrypted_password": "b094916741860db912ddf8403ba870f1",
       "referral_code": "FAS1N",
       "inviter_referral_code": null,
-      "balance": 0,
-      "refers": 0
+      "balance": 10,
+      "refers": 0,
+      "completedMissions": [
+        2
+      ]
     }
   ]
 }
