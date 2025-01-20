@@ -153,6 +153,15 @@
       "inviter_referral_code": "TEJ55",
       "balance": 0,
       "refers": 0
+    },
+    {
+      "username": "Belladbi",
+      "email": "lindleyokpeterhe@ghmail.com",
+      "encrypted_password": "74d632965d7106e2a32471f78600460a",
+      "referral_code": "BEY5E",
+      "inviter_referral_code": null,
+      "balance": 0,
+      "refers": 0
     }
   ]
 }
