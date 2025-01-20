@@ -160,9 +160,12 @@
       "encrypted_password": "74d632965d7106e2a32471f78600460a",
       "referral_code": "BEY5E",
       "inviter_referral_code": null,
-      "balance": 1,
+      "balance": 11,
       "refers": 0,
-      "lastSpin": "2025-01-20T06:02:04.669Z"
+      "lastSpin": "2025-01-20T06:02:04.669Z",
+      "completedMissions": [
+        1
+      ]
     },
     {
       "username": "Favoure",
