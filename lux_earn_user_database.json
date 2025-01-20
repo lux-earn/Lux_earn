@@ -175,6 +175,15 @@
       "completedMissions": [
         2
       ]
+    },
+    {
+      "username": "Kirddd",
+      "email": "kirdd865@gmail.com",
+      "encrypted_password": "5b07d89becd64a6d80c8f5eee07b2d1e",
+      "referral_code": "KI9BR",
+      "inviter_referral_code": null,
+      "balance": 0,
+      "refers": 0
     }
   ]
 }
