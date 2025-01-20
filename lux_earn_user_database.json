@@ -182,8 +182,9 @@
       "encrypted_password": "5b07d89becd64a6d80c8f5eee07b2d1e",
       "referral_code": "KI9BR",
       "inviter_referral_code": null,
-      "balance": 0,
-      "refers": 0
+      "balance": 10,
+      "refers": 0,
+      "lastSpin": "2025-01-20T06:22:12.020Z"
     }
   ]
 }
