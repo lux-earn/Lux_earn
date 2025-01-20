@@ -197,8 +197,9 @@
       "encrypted_password": "b4fb8c802583d75c36858811115b6272",
       "referral_code": "@AVNW",
       "inviter_referral_code": null,
-      "balance": 0,
-      "refers": 0
+      "balance": 30,
+      "refers": 0,
+      "lastSpin": "2025-01-20T06:33:51.745Z"
     }
   ]
 }
